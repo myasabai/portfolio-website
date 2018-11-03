@@ -19,6 +19,7 @@ const controller = {
         this.retrieveBookFromAPI();
         bookView.init();
         bookListView.init();
+        bookSearchView.init();
     },
     retrieveBookFromAPI: function () {
         console.log(model.startIndex);
@@ -27,7 +28,7 @@ const controller = {
                 return response.json();
             })
             .then(function (books) {  
-                controller.clearBook();             
+              //  controller.clearBook();             
                 model.books = model.books.concat(books.items);
                 model.currentBook = books.items[0];
 
@@ -40,7 +41,7 @@ const controller = {
 
                 bookListView.render();
                 bookView.render();
-                bookSearchView.init();
+                
                 
             });
     },
@@ -60,11 +61,12 @@ const controller = {
     searchBook:function(bkname){
         model.keyword = bkname;
         model.startIndex = 0;
+        this.clearBook();
         this.retrieveBookFromAPI();
     },
     clearBook:function(){
         model.books = [];
-       // bookListView.clear();
+        bookListView.clear();
     },
     viewMore:function(){
         if(model.hasMoreBook){
@@ -88,6 +90,7 @@ const bookListView = {
 
     },
     render: function () {
+        this.clear();
         this.books = controller.getBooks();       
         this.books.forEach(function(book){            
             bookListView.bookListElem.appendChild(bookListView.buildBook(book));
@@ -108,9 +111,9 @@ const bookListView = {
         });
         return bookDiv;
     },
-    // clear:function(){
-    //     model.books 
-    // }
+    clear:function(){
+        this.bookListElem.innerHTML = ' '; 
+    }
 }
 
 const bookView = {

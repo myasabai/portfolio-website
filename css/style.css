@@ -36,7 +36,7 @@
       transform: translateY(-100%) rotate(90deg);
       transform-origin: left bottom; }
     .popuparea .viewer img.rotate-180 {
-      transform: rotate(180deg); }
+      transform: translateY(-100%)rotate(180deg); }
     .popuparea .viewer img.rotate-270 {
       transform: translateX(-100%) rotate(270deg);
       transform-origin: top right; }
@@ -48,6 +48,12 @@
         color: #fff; }
       .popuparea .viewer .toolbar .btnRotate {
         padding-left: 20px; }
+        .popuparea .viewer .toolbar .btnDownload {
+          padding-left: 20px;        
+        }
+        .popuparea .viewer .toolbar .btnDownload a{
+          color:#fff!important
+        }
   .popuparea img {
     display: none; }
   .popuparea .popupRemove {

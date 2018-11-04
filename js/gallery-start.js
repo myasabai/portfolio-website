@@ -107,6 +107,7 @@ const imagePopupView = {
 		this.closeBtn = document.querySelector('.popuparea .closeImage');
 		this.rotatebtn = document.querySelector('.viewer .btnRotate');
 		this.rotateimg = document.querySelector('.viewer img');	
+		this.downloadimg = document.querySelector('.viewer a');
 		this.closeBtn.addEventListener('click',function(){
 			imagePopupView.hide();
 		});
@@ -114,11 +115,13 @@ const imagePopupView = {
 	    this.rotatebtn.addEventListener('click',function(e){
 			imagePopupView.rotate();
 		});
+
 	},
 	render: function(){
 		const image = controller.getCurrentImage();				
 		this.popuparea.classList.add("show");		
 		this.popupImage.src =image.main_url;
+		//this.downloadimg.href = image.main_url;
 		this.title.innerHTML = image.title;
 	},
 	hide: function() {
@@ -131,17 +134,22 @@ const imagePopupView = {
 		console.log(rotate);
 		if(rotate <270){
 			newrotate = rotate + 90;
-		}
-        this.rotateimg.dataset.deg = newrotate;
-		if(newrotate == 90){
-			this.popupImage.classList.add("rotate-90");
-		}
-		else if(newrotate == 180){
-			this.popupImage.classList.add("rotate-180");
-		}
-		else if(newrotate == 270){
-			this.popupImage.classList.add("rotate-270");
-		}
+			this.rotateimg.dataset.deg = newrotate;
+			if(newrotate == 90){
+				this.popupImage.classList.add(`rotate-90`);
+			}
+			else if(newrotate == 180){
+				this.popupImage.classList.add(`rotate-180`);
+			}
+			else if(newrotate == 270){
+				this.popupImage.classList.add(`rotate-270`);
+			}
+		}		
+	},
+	download:function(){
+		this.curimage = controller.getCurrentImage();		
+		console.log(this.curimage);
+		this.downloadimg.href = imagePopupView.curimage.main_url;
 		
 	}
 }

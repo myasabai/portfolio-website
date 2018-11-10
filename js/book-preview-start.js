@@ -22,16 +22,19 @@ const controller = {
         bookSearchView.init();
     },
     retrieveBookFromAPI: function () {
+
         console.log(model.startIndex);
+        
         fetch(`${model.apiUrl}?q=${model.keyword}&startIndex=${model.startIndex}`)
             .then(function (response) {
+                
                 return response.json();
             })
             .then(function (books) {  
               //  controller.clearBook();             
                 model.books = model.books.concat(books.items);
                 model.currentBook = books.items[0];
-
+                console.log('Total'+books.totalItems);
                 if(books.totalItems < model.nextStartIndex()){
                     model.hasMoreBook = false;
                 }
@@ -69,11 +72,16 @@ const controller = {
         bookListView.clear();
     },
     viewMore:function(){
+      
         if(model.hasMoreBook){
             controller.retrieveBookFromAPI();
+           
         }
         else{
-            alert('No more books!');
+            var nomorebook = document.createElement('div');
+            this.nomorebook.innerHTML += `<p style="border:1px solid black">There is no more book!</p>`
+            bookListView.bookListElem = this.nomorebook;
+
         }
     }
 }
@@ -82,23 +90,25 @@ const bookListView = {
     init: function () {
         this.bookListElem = document.getElementById('bookList');
 
-        this.viewmorebtn = document.getElementById('btnViewMore');
-        this.viewmorebtn.addEventListener('click',function(){
-            controller.viewMore();
-        });
 
-
+        $(window).on('scroll', function(){
+            if( $(window).scrollTop() >= $(document).height() - $(window).height() ) {
+               // $("#load-more").click();
+               controller.viewMore();
+            }
+        }).scroll();
     },
     render: function () {
         this.clear();
-        this.books = controller.getBooks();       
+        this.books = controller.getBooks();     
+        
         this.books.forEach(function(book){            
             bookListView.bookListElem.appendChild(bookListView.buildBook(book));
         });        
     },
     buildBook : function(book){
         const bookDiv = document.createElement('div');
-        console.log(book);
+       // console.log(book);
         bookDiv.classList.add('book');
         bookDiv.innerHTML = `
         <div class="content">
@@ -126,7 +136,7 @@ const bookView = {
         
     },
     render: function () {
-        console.log(controller.getCurrentBook());       
+       // console.log(controller.getCurrentBook());       
         const viewer = new google.books.DefaultViewer(bookView.viewport);
         const currentBook = controller.getCurrentBook(); 
         viewer.load(currentBook.id);
@@ -141,7 +151,7 @@ const bookSearchView = {
 
         this.btnclick.addEventListener('click',function(){
             var bookname = bookSearchView.textbox.value;
-            console.log(bookname);
+           // console.log(bookname);
             controller.searchBook(bookname);
             bookListView.render();
         });
